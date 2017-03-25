@@ -1,7 +1,11 @@
 package SocketWork;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -15,19 +19,21 @@ public class TcpServer {
 		ServerSocket server = new ServerSocket(8888);
 		Socket socket = server.accept();
 
-		BufferedReader br = new BufferedReader(new InputStreamReader(
-				socket.getInputStream()));
-		String str = null;
+		BufferedInputStream bw = new BufferedInputStream(socket.getInputStream());
+		BufferedOutputStream bis = new BufferedOutputStream(new FileOutputStream("d:\\abc.mp3"));
+		int str = 0;
 		
-		FileWriter fis = new FileWriter("d:\\abc.mp3");
-		BufferedWriter bis = new BufferedWriter(fis);
+		//FileWriter fis = new FileWriter("d:\\abc.mp3");
+		//BufferedWriter bis = new BufferedWriter(fis);
 		//String len = null;
-		//char[] buf = new char[1024*1024];
-		while((str = br.readLine())!=null){
-			bis.write(str);
+		byte[] buf = new byte[1024*1024];
+		while((str = bw.read(buf))!=-1){
+			//bis.write(str);
+			//byte[] by =str.getBytes();
+			bis.write(buf, 0, str);
 			//bis.newLine();
 		}
-		br.close();
+		bw.close();
 		bis.close();
 		socket.close();
 		server.close();

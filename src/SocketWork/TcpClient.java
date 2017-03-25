@@ -1,9 +1,11 @@
 package SocketWork;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -15,14 +17,13 @@ public class TcpClient {
 		System.out.println("我是客户端");
 		Socket socket = new Socket("127.0.0.1", 8888);
 
-		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(
-				socket.getOutputStream()));
-		FileReader fis = new FileReader("F:\\CloudMusic\\G.E.M.邓紫棋 - 画 (Live Piano Session II).mp3");
-		BufferedReader bis = new BufferedReader(fis);
-		String len = null;
-		//char[] buf = new char[1024*1024];
-		while((len=bis.readLine())!=null){
-			bw.write(len);
+		BufferedOutputStream bw = new BufferedOutputStream(socket.getOutputStream());
+		BufferedInputStream bis = new BufferedInputStream(new FileInputStream("F:\\CloudMusic\\bbb.mp3"));
+		//BufferedReader bis = new BufferedReader(fis);
+		int len = 0;
+		byte[] buf = new byte[1024*1024];
+		while((len=bis.read(buf))!=-1){
+			bw.write(buf,0,len);
 			//bw.newLine();
 		}
 		
